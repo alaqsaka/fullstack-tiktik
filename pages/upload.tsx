@@ -2,21 +2,31 @@ import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { FaCloudUploadAlt } from 'react-icons/fa'
 import { MdDelete } from 'react-icons/md'
+import { SanityAssetDocument } from '@sanity/client'
 import axios from 'axios'
 import useAuthStore from '../store/authStore'
 import {client} from '../utils/client'
 
 const Upload = () => {
     const [isLoading, setisLoading] = useState(false)
-    const [videoAsset, setVideoAsset] = useState()
+    const [videoAsset, setVideoAsset] = useState<SanityAssetDocument | undefined>()
     const [wrongFileType, setWrongFileType] = useState(false)
 
     const uploadVideo = async (e: any) => {
         const selectedFile = e.target.files[0];
-        const fileTypes = ['video/mp4', 'video/webm', 'video/ogg']
-
+        const fileTypes = ['video/mp4', 'video/webm', 'video/ogg', 'video/x-matroska']
+        console.log("cek file type")
+        console.log(selectedFile.type)
         if(fileTypes.includes(selectedFile.type)) {
-
+            console.log("valid fieltype")
+            client.assets.upload('file', selectedFile, {
+                contentType: selectedFile.type,
+                filename: selectedFile.name, 
+            })
+            .then((data) => {
+                setVideoAsset(data);
+                setisLoading(false)
+            })
         } else {
             setisLoading(false)
             setWrongFileType(true)
@@ -42,7 +52,14 @@ const Upload = () => {
                             {
                                 videoAsset ? (
                                     <div>
+                                        <video
+                                            src={videoAsset.url} 
+                                            loop
+                                            controls
+                                            className="rounded-xl h-[450px] mt-16 bg-black"
+                                        >
 
+                                        </video>
                                     </div>
                                 ) : (
                                     <label className='cursor-pointer'>
