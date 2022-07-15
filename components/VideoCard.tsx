@@ -67,8 +67,9 @@ const VideoCard: NextPage<IProps> = ({post}) => {
             ref={videoRef}
             src={post.video.asset.url} 
             typeof="video/mp4"
-            className='lg:w[600px] 
-            h-[300px] md:h-[400px] lg:h-[530px] w-[200px] rounded-2xl cursor-pointer bg-gray-100'>
+            className='lg:w-[600px] 
+            h-[300px] md:h-[400px] lg:h-[530px] w-[200px] 
+            rounded-2xl cursor-pointer bg-gray-100'>
 
             </video>
           </Link>
