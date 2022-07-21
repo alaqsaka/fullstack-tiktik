@@ -17,7 +17,16 @@ interface IProps {
 const Detail = ({postDetails}: IProps) => {
   const [post, setPost] = useState(postDetails)
   const [playing, setPlaying] = useState(false)
+  const [isVideoMuted, setIsVideoMuted] = useState(false)
   const videoRef = useRef<HTMLVideoElement>(null)
+
+  useEffect(() => {
+    // If we have valid video selected
+    if(post && videoRef?.current) {
+      videoRef.current.muted = isVideoMuted;
+    }
+    
+  }, [post, isVideoMuted])
 
   // check if video exist
 
@@ -33,6 +42,8 @@ const Detail = ({postDetails}: IProps) => {
       setPlaying(true)
     }
   }
+
+  
 
   return (
     <div className='flex w-full absolute left-0 top-0
@@ -66,6 +77,19 @@ const Detail = ({postDetails}: IProps) => {
                 </button>
               )}
             </div>
+          </div>
+
+          <div className='absolute bottom-5 lg:bottom-10 
+          right-5 lg:right-10 cursor-pointer'>
+            {isVideoMuted ? (
+                <button onClick={() => setIsVideoMuted(false)}>
+                  <HiVolumeOff className='text-white text-2xl lg:text-4xl'/>
+                </button>
+              ) : (
+                <button onClick={() => setIsVideoMuted(true)}>
+                  <HiVolumeUp className='text-white text-2xl lg:text-4xl'/>
+                </button>
+              )}
           </div>
       </div>
     </div>
