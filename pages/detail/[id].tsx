@@ -9,6 +9,7 @@ import { HiVolumeUp, HiVolumeOff } from 'react-icons/hi'
 import axios from 'axios'
 import { BASE_URL } from '../../utils'
 import { Video } from '../../types'
+import useAuthStore from '../../store/authStore'
 
 interface IProps {
   postDetails: Video,
@@ -20,6 +21,9 @@ const Detail = ({postDetails}: IProps) => {
   const [isVideoMuted, setIsVideoMuted] = useState(false)
   const videoRef = useRef<HTMLVideoElement>(null)
   const router = useRouter()
+
+  // Get logged in user profile from store -> useAuthStore
+  const {userProfile} = useAuthStore()
 
   useEffect(() => {
     // If we have valid video selected
@@ -78,6 +82,7 @@ const Detail = ({postDetails}: IProps) => {
             </div>
           </div>
 
+          {/* Mute Button */}
           <div className='absolute bottom-5 lg:bottom-10 
           right-5 lg:right-10 cursor-pointer'>
             {isVideoMuted ? (
@@ -91,6 +96,50 @@ const Detail = ({postDetails}: IProps) => {
               )}
           </div>
       </div>
+
+      {/* Right side of the screen */}
+      <div className='relative w-[1000px] md:w-[900px] lg:w-[700px]'>
+        <div className='lg:mt-20 mt-10'>
+          {/* Profile pict and name */}
+          <div className='flex gap-3 p-2 cursor-pointer font-semibold rounded'>
+            <div className='ml-4 md:w-15 md:h-15 w-16 h-16'>
+              <Link href="/">
+                <>
+                  <Image width={62} 
+                  height={62} 
+                  className="rounded-full" 
+                  src={post.postedBy.image}
+                  alt="profile photo"
+                  layout='responsive'>
+
+                  </Image>
+                </>
+              </Link>
+            </div>
+            <div>
+              <Link href="/">
+                <div className='mt-2 flex flex-col gap-2'>
+                  <p className='flex items-center gap-2 md:text-md font-bold text-primary'>{post.postedBy.userName} {``} <GoVerified className='text-blue-400 text-md' /></p>
+                  <p className='capatilize font-medium text-xs text-gray-500 hidden md:block'>{post.postedBy.userName} {``} </p>
+                </div>
+              </Link>
+            </div>
+          </div>
+
+          {/* Captions */}
+          <p className='px-10 text-lg text-gray-600'>{post.caption}</p>
+
+          {/* Likes Button */}
+          <div className='mt-10 px-10'>
+            {/* Only can like if logged in */}
+            {userProfile && (
+              <LikeButton />
+            )}
+          </div>
+          <Comments />
+        </div>
+      </div>
+
     </div>
   )
 }
