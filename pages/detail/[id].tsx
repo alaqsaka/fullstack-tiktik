@@ -10,6 +10,8 @@ import axios from 'axios'
 import { BASE_URL } from '../../utils'
 import { Video } from '../../types'
 import useAuthStore from '../../store/authStore'
+import LikeButton from '../../components/LikeButton'
+import Comments from '../../components/Comments'
 
 interface IProps {
   postDetails: Video,
@@ -23,7 +25,7 @@ const Detail = ({postDetails}: IProps) => {
   const router = useRouter()
 
   // Get logged in user profile from store -> useAuthStore
-  const {userProfile} = useAuthStore()
+  const {userProfile}: any = useAuthStore()
 
   useEffect(() => {
     // If we have valid video selected
@@ -45,6 +47,14 @@ const Detail = ({postDetails}: IProps) => {
     } else {
       videoRef?.current?.play()
       setPlaying(true)
+    }
+  }
+
+  // Like function
+  const handleLike = async (like: boolean) => {
+    if(userProfile) {
+      const response = await axios.put(`${BASE_URL}/api/like`, 
+      {userId: userProfile._id, postId: post._id, like})
     }
   }
 
@@ -133,7 +143,10 @@ const Detail = ({postDetails}: IProps) => {
           <div className='mt-10 px-10'>
             {/* Only can like if logged in */}
             {userProfile && (
-              <LikeButton />
+              <LikeButton 
+                handleLike={() => handleLike(true)}
+                handleDislike={() => handleLike(false)}
+              />
             )}
           </div>
           <Comments />
