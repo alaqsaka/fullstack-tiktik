@@ -11,7 +11,7 @@ export default async function handler(
   if(req.method === "POST") {
     const {userId, postId, like} = req.body;
 
-    const data = await client
+    const data = like ? await client
     .patch(postId)
     .setIfMissing({likes: []})
     .insert('after', 'likes[-1]', [
@@ -21,5 +21,11 @@ export default async function handler(
         }
     ])
     .commit()
+    : await client
+      .patch(postId)
+      .unset([`likes[_ref=="${userId}"]`])
+      .commit();
+
+    res.status(200).json(data)
   }
 }
