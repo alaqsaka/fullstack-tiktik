@@ -41,7 +41,7 @@ const Comments = ({comment, setComment, addComment,
           <form action="" onSubmit={addComment} className="flex gap-4">
             <input 
             value={comment}
-            onChange={(e) => setComment(e.target.value.trim())} 
+            onChange={(e) => setComment(e.target.value)} 
             placeholder="Add Comment..." 
             className='bg-primary px-6 py-4 text-md f
             ont-medium border-2 w-[250px] md:w-[700px] lg:w-[350px] border-gray-100
