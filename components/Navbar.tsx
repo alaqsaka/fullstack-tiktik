@@ -9,7 +9,7 @@ import {IoMdAdd} from 'react-icons/io'
 import Logo from '../utils/tiktik-logo.png'
 import { createOrGetUser } from '../utils'
 import useAuthStore from '../store/authStore'
-import { GoogleLogout } from 'react-google-login'
+
 
 const Navbar = () => {
   const { userProfile, addUser, removeUser } = useAuthStore();
